@@ -1,19 +1,23 @@
 <!DOCTYPE HTML>
 <html lang="en">
   <head>
-    <meta http-equiv="refresh" content="1;url=/api-doc/1.9.6/GraphQL/Schema/InputObject" />
+    <meta http-equiv="refresh" content="1;url=/api-doc/1.11.6/GraphQL/Schema/InputObject" />
   </head>
   <body>
     <p>Class: GraphQL::Schema::InputObject &lt; GraphQL::Schema::Member
 Includes:
 GraphQL::Dig
 Extended by:
+GraphQL::Schema::Member::ValidatesInput,
+GraphQL::Schema::Member::HasArguments::ArgumentObjectLoader,
 GraphQL::Schema::Member::HasArguments, Forwardable,
 GraphQL::Schema::Member::AcceptsDefinition
 Class methods:
-argument, kind, to_graphql
+argument, coerce_input, coerce_result, kind, to_graphql,
+validate_non_null_input
 Instance methods:
-[], initialize, key?, to_h, to_kwargs, unwrap_value</p>
+[], initialize, key?, prepare, to_h, to_hash, to_kwargs,
+unwrap_value</p>
 
 
   </body>

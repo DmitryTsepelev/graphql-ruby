@@ -19,7 +19,7 @@
           </a>
           <a href="/getting_started">Get Started</a>
           <a href="/guides">Guides</a>
-          <a href="/api-doc/1.9.6/">API</a>
+          <a href="/api-doc/1.11.6/">API</a>
           <a href="https://tinyletter.com/graphql-ruby">Newsletter</a>
           <a href="https://github.com/rmosolgo/graphql-ruby">Source Code</a>
           <a href="https://graphql.pro">Upgrade to Pro</a>
@@ -56,13 +56,13 @@
 
 <h1 class="guide-header">Server Management</h1>
 <div class="guide-container">
-  <p>After       <a href="/operation_store/getting_started">getting started</a>, here some things to keep in mind.</p>
+  <p>After <a href="/operation_store/getting_started">getting started</a>, here some things to keep in mind.</p>
 
 <h3 id="rejecting-arbitrary-queries">Rejecting Arbitrary Queries</h3>
 
 <p>With persisted queries, you can stop accepting arbitrary GraphQL input. This way, malicious users can’t run large or inappropriate queries on your server.</p>
 
-<p>In short, you can ignore arbitrary GraphQL by <em>skipping</em> the first argument of <code class="highlighter-rouge">MySchema.execute</code>:</p>
+<p>In short, you can ignore arbitrary GraphQL by <em>skipping</em> the first argument of <code class="language-plaintext highlighter-rouge">MySchema.execute</code>:</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app/controllers/graphql.rb</span>
 
@@ -81,7 +81,7 @@
   <li>Should some users still be allowed to send custom strings? (For example, do staff members use GraphiQL to develop new features or debug issues?)</li>
 </ul>
 
-<p>If those apply to you, you can apply some logic to <code class="highlighter-rouge">query_string</code>:</p>
+<p>If those apply to you, you can apply some logic to <code class="language-plaintext highlighter-rouge">query_string</code>:</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Allow arbitrary GraphQL:</span>
 <span class="c1"># - from staff users</span>
@@ -100,30 +100,32 @@
 <span class="p">)</span>
 </code></pre></div></div>
 
-<h3 id="deleting-data">Deleting Data</h3>
+<h3 id="archiving-and-deleting-data">Archiving and Deleting Data</h3>
 
-<p>Clients can only <em>add</em> to the database, but as an administrator, you can also delete entries from the database. (Make sure you       <a href="/pro/dashboard">authorize access to the Dashboard</a>.)This is a dangerous operation: by deleting something, any clients who depend on that data will crash.</p>
+<p>Clients can only <em>add</em> to the database, but as an administrator, you can also archive or delete entries from the database. (Make sure you <a href="/pro/dashboard">authorize access to the Dashboard</a>.) This is a dangerous operation: by archiving or deleting something, any clients who depend on that data will crash.</p>
 
-<p>Some reasons to delete from the database are:</p>
+<p>Some reasons to archive or delete from the database are:</p>
 
 <ul>
   <li>Data was pushed in error; the data is not used</li>
   <li>The queries are invalid or unsafe; it’s better to remove them than to keep them</li>
 </ul>
 
-<p>If this is true, you can use “Delete” buttons to remove individual operations or entire clients.</p>
+<p>If this is true, you can use “Archive” or “Delete” buttons to remove things from production.</p>
+
+<p>When an operation is archived, it’s no longer available to clients, but it’s still in the database. It can be unarchived later, so this is lower-risk than full deletion.</p>
 
 <h3 id="integration-with-your-application">Integration with Your Application</h3>
 
-<p>It’s on the road map to add a Ruby API to <code class="highlighter-rouge">OperationStore</code> so that you can integrate it with your application. For example, you might:</p>
+<p>It’s on the road map to add a Ruby API to <code class="language-plaintext highlighter-rouge">OperationStore</code> so that you can integrate it with your application. For example, you might:</p>
 
 <ul>
   <li>Create clients that correspond to users in your system</li>
   <li>Show client secrets via the Dashboard so that users can save them</li>
-  <li>Render your own administration dashboards with <code class="highlighter-rouge">OperationStore</code> data</li>
+  <li>Render your own administration dashboards with <code class="language-plaintext highlighter-rouge">OperationStore</code> data</li>
 </ul>
 
-<p>If this interests you, please <a href="https://github.com/rmosolgo/graphql-ruby/issues/new?title=OperationStore Ruby API" target="_blank">open an issue</a> or email <code class="highlighter-rouge">support@graphql.pro</code>.</p>
+<p>If this interests you, please <a href="https://github.com/rmosolgo/graphql-ruby/issues/new?title=OperationStore Ruby API" target="_blank">open an issue</a> or email <code class="language-plaintext highlighter-rouge">support@graphql.pro</code>.</p>
 
 </div>
 <p class="guide-footer">

@@ -19,7 +19,7 @@
           </a>
           <a href="/getting_started">Get Started</a>
           <a href="/guides">Guides</a>
-          <a href="/api-doc/1.9.6/">API</a>
+          <a href="/api-doc/1.11.6/">API</a>
           <a href="https://tinyletter.com/graphql-ruby">Newsletter</a>
           <a href="https://github.com/rmosolgo/graphql-ruby">Source Code</a>
           <a href="https://graphql.pro">Upgrade to Pro</a>
@@ -49,15 +49,15 @@
 <div class="guide-container">
   <p>Relay expresses <a href="https://facebook.github.io/relay/graphql/connections.htm">one-to-many relationships with <em>connections</em></a>. Connections support pagination, filtering and metadata in a robust way.</p>
 
-<p><code class="highlighter-rouge">graphql-ruby</code> includes built-in connection support for <code class="highlighter-rouge">Array</code>, <code class="highlighter-rouge">ActiveRecord::Relation</code>s, <code class="highlighter-rouge">Sequel::Dataset</code>s, and <code class="highlighter-rouge">Mongoid::Criteria</code>s. You can define custom connection classes to expose other collections with GraphQL.</p>
+<p><code class="language-plaintext highlighter-rouge">graphql-ruby</code> includes built-in connection support for <code class="language-plaintext highlighter-rouge">Array</code>, <code class="language-plaintext highlighter-rouge">ActiveRecord::Relation</code>s, <code class="language-plaintext highlighter-rouge">Sequel::Dataset</code>s, and <code class="language-plaintext highlighter-rouge">Mongoid::Criteria</code>s. You can define custom connection classes to expose other collections with GraphQL.</p>
 
 <h2 id="connection-fields">Connection fields</h2>
 
-<p>To define a connection field, use the <code class="highlighter-rouge">field</code> method. For a return type, get a type’s <code class="highlighter-rouge">.connection_type</code>.  The field’s method or <code class="highlighter-rouge">resolver:</code> should return a collection (eg, <code class="highlighter-rouge">Array</code> or <code class="highlighter-rouge">ActiveRecord::Relation</code>) <em>without</em> pagination. (The connection will paginate the collection).</p>
+<p>To define a connection field, use the <code class="language-plaintext highlighter-rouge">field</code> method. For a return type, get a type’s <code class="language-plaintext highlighter-rouge">.connection_type</code>.  The field’s method or <code class="language-plaintext highlighter-rouge">resolver:</code> should return a collection (eg, <code class="language-plaintext highlighter-rouge">Array</code> or <code class="language-plaintext highlighter-rouge">ActiveRecord::Relation</code>) <em>without</em> pagination. (The connection will paginate the collection).</p>
 
 <p>For example:</p>
 
-<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">PostType</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Schema</span><span class="o">::</span><span class="no">Object</span>
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Types::PostType</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Schema</span><span class="o">::</span><span class="no">Object</span>
   <span class="c1"># `Post#comments` returns an ActiveRecord::Relation</span>
   <span class="c1"># The GraphQL field returns a Connection</span>
   <span class="n">field</span> <span class="ss">:comments</span><span class="p">,</span> <span class="no">CommentType</span><span class="p">.</span><span class="nf">connection_type</span><span class="p">,</span> <span class="ss">null: </span><span class="kp">false</span>
@@ -68,7 +68,7 @@
 <span class="k">end</span>
 </code></pre></div></div>
 
-<p>(GraphQL-Ruby applies connection logic because the return type’s name ends in <code class="highlighter-rouge">Connection</code>. You can manually override this with <code class="highlighter-rouge">connection: true</code> or <code class="highlighter-rouge">connection: false</code>.)</p>
+<p>(GraphQL-Ruby applies connection logic because the return type’s name ends in <code class="language-plaintext highlighter-rouge">Connection</code>. You can manually override this with <code class="language-plaintext highlighter-rouge">connection: true</code> or <code class="language-plaintext highlighter-rouge">connection: false</code>.)</p>
 
 <p>You can also define custom arguments and a custom resolve function for connections, just like other fields:</p>
 
@@ -78,7 +78,7 @@
 <span class="k">end</span>
 
 <span class="k">def</span> <span class="nf">featured_comments</span><span class="p">(</span><span class="ss">since: </span><span class="kp">nil</span><span class="p">)</span>
-  <span class="n">comments</span> <span class="o">=</span> <span class="n">post</span><span class="p">.</span><span class="nf">comments</span><span class="p">.</span><span class="nf">featured</span>
+  <span class="n">comments</span> <span class="o">=</span> <span class="n">object</span><span class="p">.</span><span class="nf">comments</span><span class="p">.</span><span class="nf">featured</span>
   <span class="k">if</span> <span class="n">since</span>
     <span class="n">comments</span> <span class="o">=</span> <span class="n">comments</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="s2">"created_at &gt;= ?"</span><span class="p">,</span> <span class="n">since</span><span class="p">)</span>
   <span class="k">end</span>
@@ -89,12 +89,12 @@
 
 <h3 id="maximum-page-size">Maximum Page Size</h3>
 
-<p>You can limit the number of results with <code class="highlighter-rouge">max_page_size:</code>:</p>
+<p>You can limit the number of results with <code class="language-plaintext highlighter-rouge">max_page_size:</code>:</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">field</span> <span class="ss">:featured_comments</span><span class="p">,</span> <span class="no">CommentType</span><span class="p">.</span><span class="nf">connection_type</span><span class="p">,</span> <span class="ss">null: </span><span class="kp">false</span><span class="p">,</span> <span class="ss">max_page_size: </span><span class="mi">50</span>
 </code></pre></div></div>
 
-<p>In addition, you can set a global default for all connection that do not specify a <code class="highlighter-rouge">max_page_size</code>:</p>
+<p>In addition, you can set a global default for all connection that do not specify a <code class="language-plaintext highlighter-rouge">max_page_size</code>:</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MySchema</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Schema</span>
   <span class="n">default_max_page_size</span> <span class="mi">100</span>
@@ -106,33 +106,32 @@
 <p>You can customize connection and edge types by using the class-based API:</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Make an edge class for use in the connection below:</span>
-<span class="k">class</span> <span class="nc">PostEdgeType</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Types</span><span class="o">::</span><span class="no">Relay</span><span class="o">::</span><span class="no">BaseEdge</span>
+<span class="k">class</span> <span class="nc">Types::PostEdgeType</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Types</span><span class="o">::</span><span class="no">Relay</span><span class="o">::</span><span class="no">BaseEdge</span>
   <span class="n">node_type</span><span class="p">(</span><span class="no">PostType</span><span class="p">)</span>
 <span class="k">end</span>
 
 <span class="c1"># Make a customized connection type</span>
-<span class="k">class</span> <span class="nc">PostConnectionWithTotalCountType</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Types</span><span class="o">::</span><span class="no">Relay</span><span class="o">::</span><span class="no">BaseConnection</span>
+<span class="k">class</span> <span class="nc">Types::PostConnectionWithTotalCountType</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Types</span><span class="o">::</span><span class="no">Relay</span><span class="o">::</span><span class="no">BaseConnection</span>
   <span class="n">edge_type</span><span class="p">(</span><span class="no">PostEdgeType</span><span class="p">)</span>
 
   <span class="n">field</span> <span class="ss">:total_count</span><span class="p">,</span> <span class="no">Integer</span><span class="p">,</span> <span class="ss">null: </span><span class="kp">false</span>
   <span class="k">def</span> <span class="nf">total_count</span>
     <span class="c1"># - `object` is the Connection</span>
-    <span class="c1"># - `object.nodes` is the collection of Posts</span>
-    <span class="n">object</span><span class="p">.</span><span class="nf">nodes</span><span class="p">.</span><span class="nf">size</span>
+    <span class="c1"># - `object.items` is the original collection of Posts</span>
+    <span class="n">object</span><span class="p">.</span><span class="nf">items</span><span class="p">.</span><span class="nf">size</span>
   <span class="k">end</span>
 <span class="k">end</span>
-
 </code></pre></div></div>
 
-<p>Now, you can use <code class="highlighter-rouge">PostConnectionWithTotalCountType</code> to define a connection with the “totalCount” field:</p>
+<p>Now, you can use <code class="language-plaintext highlighter-rouge">PostConnectionWithTotalCountType</code> to define a connection with the “totalCount” field:</p>
 
-<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">AuthorType</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Schema</span><span class="o">::</span><span class="no">Object</span>
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Types::AuthorType</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Schema</span><span class="o">::</span><span class="no">Object</span>
   <span class="c1"># Use the custom connection type:</span>
   <span class="n">field</span> <span class="ss">:posts</span><span class="p">,</span> <span class="no">PostConnectionWithTotalCountType</span><span class="p">,</span> <span class="ss">null: </span><span class="kp">false</span><span class="p">,</span> <span class="ss">connection: </span><span class="kp">true</span>
 <span class="k">end</span>
 </code></pre></div></div>
 
-<p>(It uses <code class="highlighter-rouge">connection: true</code> because the type name <em>doesn’t</em> end in <code class="highlighter-rouge">"Connection"</code>.)</p>
+<p>(It uses <code class="language-plaintext highlighter-rouge">connection: true</code> because the type name <em>doesn’t</em> end in <code class="language-plaintext highlighter-rouge">"Connection"</code>.)</p>
 
 <p>This way, you can query your custom fields, for example:</p>
 
@@ -145,30 +144,30 @@
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
-<p>In the same vein, you can extend your <code class="highlighter-rouge">*Edge</code> classes with extra fields.</p>
+<p>In the same vein, you can extend your <code class="language-plaintext highlighter-rouge">*Edge</code> classes with extra fields.</p>
 
 <h3 id="customizing-base-classes">Customizing Base Classes</h3>
 
-<p>The provided classes in <a href="/api-doc/1.9.6/GraphQL/Types/Relay" target="_blank" title="API docs for GraphQL::Types::Relay"><code>GraphQL::Types::Relay</code></a> extend <a href="/api-doc/1.9.6/GraphQL/Schema/Object" target="_blank" title="API docs for GraphQL::Schema::Object"><code>Schema::Object</code></a>, but if you want to add your own extensions, you can build your own type system using the built-in ones for inspiration.</p>
+<p>The provided classes in <a href="/api-doc/1.11.6/GraphQL/Types/Relay" target="_blank" title="API docs for GraphQL::Types::Relay"><code>GraphQL::Types::Relay</code></a> extend <a href="/api-doc/1.11.6/GraphQL/Schema/Object" target="_blank" title="API docs for GraphQL::Schema::Object"><code>Schema::Object</code></a>, but if you want to add your own extensions, you can build your own type system using the built-in ones for inspiration.</p>
 
 <p>For example, to make your connection classes extend your <em>own</em> base object, you could add a base connection class to your app:</p>
 
-<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Types</span><span class="o">::</span><span class="no">BaseConnection</span> <span class="o">&lt;</span> <span class="no">Types</span><span class="o">::</span><span class="no">BaseObject</span>
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Types::BaseConnection</span> <span class="o">&lt;</span> <span class="no">Types</span><span class="o">::</span><span class="no">BaseObject</span>
   <span class="c1"># ... copy-paste here</span>
 <span class="k">end</span>
 </code></pre></div></div>
 
-<p>Then take code from <a href="/api-doc/1.9.6/GraphQL/Types/Relay/BaseConnection" target="_blank" title="API docs for GraphQL::Types::Relay::BaseConnection"><code>GraphQL::Types::Relay::BaseConnection</code></a> and adapt it to your app.</p>
+<p>Then take code from <a href="/api-doc/1.11.6/GraphQL/Types/Relay/BaseConnection" target="_blank" title="API docs for GraphQL::Types::Relay::BaseConnection"><code>GraphQL::Types::Relay::BaseConnection</code></a> and adapt it to your app.</p>
 
-<p>You can mix-and-match customized and built-in types. For example, if you customize the base <code class="highlighter-rouge">Edge</code> class, you can still use the built-in <a href="/api-doc/1.9.6/GraphQL/Types/Relay/PageInfo" target="_blank" title="API docs for GraphQL::Types::Relay::PageInfo"><code>Types::Relay::PageInfo</code></a> class.</p>
+<p>You can mix-and-match customized and built-in types. For example, if you customize the base <code class="language-plaintext highlighter-rouge">Edge</code> class, you can still use the built-in <a href="/api-doc/1.11.6/GraphQL/Types/Relay/PageInfo" target="_blank" title="API docs for GraphQL::Types::Relay::PageInfo"><code>Types::Relay::PageInfo</code></a> class.</p>
 
 <h3 id="custom-edge-classes">Custom Edge classes</h3>
 
-<p>For more robust custom edges, you can define a custom edge class. It will be <code class="highlighter-rouge">obj</code> in the edge type’s resolve function. For example, to define a membership edge:</p>
+<p>For more robust custom edges, you can define a custom edge class. It will be <code class="language-plaintext highlighter-rouge">obj</code> in the edge type’s resolve function. For example, to define a membership edge:</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Make sure to familiarize yourself with GraphQL::Relay::Edge --</span>
 <span class="c1"># you have to avoid naming conflicts here!</span>
-<span class="k">class</span> <span class="nc">MembershipSinceEdge</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Relay</span><span class="o">::</span><span class="no">Edge</span>
+<span class="k">class</span> <span class="nc">Types::MembershipSinceEdge</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Relay</span><span class="o">::</span><span class="no">Edge</span>
   <span class="c1"># Cache `membership` to avoid multiple DB queries</span>
   <span class="k">def</span> <span class="nf">membership</span>
     <span class="vi">@membership</span> <span class="o">||=</span> <span class="k">begin</span>
@@ -193,7 +192,7 @@
 <p>Then, hook it up with custom edge type and custom connection type:</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Person =&gt; Membership =&gt; Team</span>
-<span class="k">class</span> <span class="nc">MembershipSinceEdgeType</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Types</span><span class="o">::</span><span class="no">Relay</span><span class="o">::</span><span class="no">BaseEdge</span>
+<span class="k">class</span> <span class="nc">Types::MembershipSinceEdgeType</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Types</span><span class="o">::</span><span class="no">Relay</span><span class="o">::</span><span class="no">BaseEdge</span>
   <span class="n">node_type</span><span class="p">(</span><span class="no">TeamType</span><span class="p">)</span>
 
   <span class="n">field</span> <span class="ss">:member_since</span><span class="p">,</span> <span class="no">Integer</span><span class="p">,</span> <span class="ss">null: </span><span class="kp">false</span><span class="p">,</span>
@@ -203,7 +202,7 @@
     <span class="ss">method: :primary?</span>
 <span class="k">end</span>
 
-<span class="k">class</span> <span class="nc">TeamMembershipsConnectionType</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Types</span><span class="o">::</span><span class="no">Relay</span><span class="o">::</span><span class="no">BaseConnection</span>
+<span class="k">class</span> <span class="nc">Types::TeamMembershipsConnectionType</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Types</span><span class="o">::</span><span class="no">Relay</span><span class="o">::</span><span class="no">BaseConnection</span>
   <span class="c1"># Here, hook up your custom class with `edge_class:`</span>
   <span class="n">edge_type</span><span class="p">(</span><span class="no">MembershipSinceEdgeType</span><span class="p">,</span> <span class="ss">edge_class: </span><span class="no">MembershipSinceEdge</span><span class="p">)</span>
 <span class="k">end</span>
@@ -219,9 +218,9 @@
 <span class="n">connection_class</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p><code class="highlighter-rouge">.connection_for_nodes</code> will return RelationConnection or ArrayConnection depending on <code class="highlighter-rouge">items</code>, then you can make a new connection</p>
+<p><code class="language-plaintext highlighter-rouge">.connection_for_nodes</code> will return RelationConnection or ArrayConnection depending on <code class="language-plaintext highlighter-rouge">items</code>, then you can make a new connection</p>
 
-<p>For specifying a connection based on an <code class="highlighter-rouge">ActiveRecord::Relation</code> or <code class="highlighter-rouge">Sequel::Dataset</code>:</p>
+<p>For specifying a connection based on an <code class="language-plaintext highlighter-rouge">ActiveRecord::Relation</code> or <code class="language-plaintext highlighter-rouge">Sequel::Dataset</code>:</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">object</span> <span class="o">=</span> <span class="p">{}</span>       <span class="c1"># your newly created object</span>
 <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span>     <span class="c1"># your AR or Sequel collection</span>
@@ -233,7 +232,7 @@
 <span class="n">edge</span> <span class="o">=</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Relay</span><span class="o">::</span><span class="no">Edge</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">object</span><span class="p">,</span> <span class="n">items_connection</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>Additionally, connections may be provided with the <code class="highlighter-rouge">GraphQL::Field</code> that created them. This may be used for custom introspection or instrumentation. For example,</p>
+<p>Additionally, connections may be provided with the <code class="language-plaintext highlighter-rouge">GraphQL::Field</code> that created them. This may be used for custom introspection or instrumentation. For example,</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="no">Schema</span><span class="p">.</span><span class="nf">get_field</span><span class="p">(</span><span class="no">TodoListType</span><span class="p">,</span> <span class="s2">"todos"</span><span class="p">)</span>
   <span class="c1"># =&gt; #&lt;GraphQL::Field name="todos"&gt;</span>
@@ -244,7 +243,7 @@
 
 <h3 id="custom-connections">Custom connections</h3>
 
-<p>You can define a custom connection class and add it to <code class="highlighter-rouge">GraphQL::Relay</code>.</p>
+<p>You can define a custom connection class and add it to <code class="language-plaintext highlighter-rouge">GraphQL::Relay</code>.</p>
 
 <p>First, define the custom connection:</p>
 
@@ -269,28 +268,17 @@
 <span class="k">end</span>
 </code></pre></div></div>
 
-<p>Then, register the new connection with <code class="highlighter-rouge">GraphQL::Relay::BaseConnection</code>:</p>
+<p>Then, register the new connection with <code class="language-plaintext highlighter-rouge">GraphQL::Relay::BaseConnection</code>:</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># When exposing a `Set`, use `SetConnection`:</span>
 <span class="no">GraphQL</span><span class="o">::</span><span class="no">Relay</span><span class="o">::</span><span class="no">BaseConnection</span><span class="p">.</span><span class="nf">register_connection_implementation</span><span class="p">(</span><span class="no">Set</span><span class="p">,</span> <span class="no">SetConnection</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>At runtime, <code class="highlighter-rouge">GraphQL::Relay</code> will use <code class="highlighter-rouge">SetConnection</code> to expose <code class="highlighter-rouge">Set</code>s.</p>
-
-<h3 id="creating-connection-fields-by-hand">Creating connection fields by hand</h3>
-
-<p>If you need lower-level access to Connection fields, you can create them programmatically. Given a <code class="highlighter-rouge">GraphQL::Field</code> which returns a collection of items, you can turn it into a connection field with <code class="highlighter-rouge">ConnectionField.create</code>.</p>
-
-<p>For example, to wrap a field with a connection field:</p>
-
-<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">field</span> <span class="o">=</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Field</span><span class="p">.</span><span class="nf">new</span>
-<span class="c1"># ... define the field</span>
-<span class="n">connection_field</span> <span class="o">=</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Relay</span><span class="o">::</span><span class="no">ConnectionField</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
-</code></pre></div></div>
+<p>At runtime, <code class="language-plaintext highlighter-rouge">GraphQL::Relay</code> will use <code class="language-plaintext highlighter-rouge">SetConnection</code> to expose <code class="language-plaintext highlighter-rouge">Set</code>s.</p>
 
 <h2 id="cursors">Cursors</h2>
 
-<p>By default, cursors are encoded in base64 to make them opaque to a human client. You can specify a custom encoder with <code class="highlighter-rouge">Schema#cursor_encoder</code>. The value should be an object which responds to <code class="highlighter-rouge">.encode(plain_text, nonce:)</code> and <code class="highlighter-rouge">.decode(encoded_text, nonce: false)</code>.</p>
+<p>By default, cursors are encoded in base64 to make them opaque to a human client. You can specify a custom encoder with <code class="language-plaintext highlighter-rouge">Schema#cursor_encoder</code>. The value should be an object which responds to <code class="language-plaintext highlighter-rouge">.encode(plain_text, nonce:)</code> and <code class="language-plaintext highlighter-rouge">.decode(encoded_text, nonce: false)</code>.</p>
 
 <p>For example, to use URL-safe base-64 encoding:</p>
 
@@ -304,7 +292,7 @@
   <span class="k">end</span>
 <span class="k">end</span>
 
-<span class="no">MySchema</span> <span class="o">=</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Schema</span><span class="p">.</span><span class="nf">define</span> <span class="k">do</span>
+<span class="k">class</span> <span class="nc">MySchema</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Schema</span>
   <span class="c1"># ...</span>
   <span class="n">cursor_encoder</span><span class="p">(</span><span class="no">URLSafeBase64Encoder</span><span class="p">)</span>
 <span class="k">end</span>
@@ -312,7 +300,7 @@
 
 <p>Now, all connections will use URL-safe base-64 encoding.</p>
 
-<p>From a connection instance, the <code class="highlighter-rouge">cursor_encoders</code> methods available via <a href="/api-doc/1.9.6/GraphQL/Relay/BaseConnection#encode-instance_method" target="_blank" title="API docs for GraphQL::Relay::BaseConnection#encode"><code>GraphQL::Relay::BaseConnection#encode</code></a> and <a href="/api-doc/1.9.6/GraphQL/Relay/BaseConnection#decode-instance_method" target="_blank" title="API docs for GraphQL::Relay::BaseConnection#decode"><code>GraphQL::Relay::BaseConnection#decode</code></a></p>
+<p>From a connection instance, the <code class="language-plaintext highlighter-rouge">cursor_encoders</code> methods available via <a href="/api-doc/1.11.6/GraphQL/Relay/BaseConnection#encode-instance_method" target="_blank" title="API docs for GraphQL::Relay::BaseConnection#encode"><code>GraphQL::Relay::BaseConnection#encode</code></a> and <a href="/api-doc/1.11.6/GraphQL/Relay/BaseConnection#decode-instance_method" target="_blank" title="API docs for GraphQL::Relay::BaseConnection#decode"><code>GraphQL::Relay::BaseConnection#decode</code></a></p>
 
 </div>
 <p class="guide-footer">

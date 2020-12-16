@@ -19,7 +19,7 @@
           </a>
           <a href="/getting_started">Get Started</a>
           <a href="/guides">Guides</a>
-          <a href="/api-doc/1.9.6/">API</a>
+          <a href="/api-doc/1.11.6/">API</a>
           <a href="https://tinyletter.com/graphql-ruby">Newsletter</a>
           <a href="https://github.com/rmosolgo/graphql-ruby">Source Code</a>
           <a href="https://graphql.pro">Upgrade to Pro</a>
@@ -56,7 +56,7 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Like a Ruby <code class="highlighter-rouge">Hash</code>, an input object consists of keys and values. Unlike a Hash, its keys and value types must be defined statically, as part of the GraphQL system. For example, here’s an input object, expressed in the <a href="https://graphql.org/learn/schema/#type-language">GraphQL Schema Definition Language</a> (SDL):</p>
+<p>Like a Ruby <code class="language-plaintext highlighter-rouge">Hash</code>, an input object consists of keys and values. Unlike a Hash, its keys and value types must be defined statically, as part of the GraphQL system. For example, here’s an input object, expressed in the <a href="https://graphql.org/learn/schema/#type-language">GraphQL Schema Definition Language</a> (SDL):</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">input</span> <span class="no">PostAttributes</span> <span class="p">{</span>
   <span class="ss">title: </span><span class="no">String</span><span class="o">!</span>
@@ -68,21 +68,21 @@
 <p>This input object has three possible keys:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">title</code> is required (denoted by <code class="highlighter-rouge">!</code>), and must be a <code class="highlighter-rouge">String</code></li>
-  <li><code class="highlighter-rouge">fullText</code> is also a required String</li>
-  <li><code class="highlighter-rouge">categories</code> is optional (it doesn’t have <code class="highlighter-rouge">!</code>), and if present, it must be a list of <code class="highlighter-rouge">PostCategory</code> values.</li>
+  <li><code class="language-plaintext highlighter-rouge">title</code> is required (denoted by <code class="language-plaintext highlighter-rouge">!</code>), and must be a <code class="language-plaintext highlighter-rouge">String</code></li>
+  <li><code class="language-plaintext highlighter-rouge">fullText</code> is also a required String</li>
+  <li><code class="language-plaintext highlighter-rouge">categories</code> is optional (it doesn’t have <code class="language-plaintext highlighter-rouge">!</code>), and if present, it must be a list of <code class="language-plaintext highlighter-rouge">PostCategory</code> values.</li>
 </ul>
 
 <h2 id="defining-input-object-types">Defining Input Object Types</h2>
 
-<p>Input object types extend <a href="/api-doc/1.9.6/GraphQL/Schema/InputObject" target="_blank" title="API docs for GraphQL::Schema::InputObject"><code>GraphQL::Schema::InputObject</code></a> and define key-value pairs with the <code class="highlighter-rouge">argument(...)</code> method. For example:</p>
+<p>Input object types extend <a href="/api-doc/1.11.6/GraphQL/Schema/InputObject" target="_blank" title="API docs for GraphQL::Schema::InputObject"><code>GraphQL::Schema::InputObject</code></a> and define key-value pairs with the <code class="language-plaintext highlighter-rouge">argument(...)</code> method. For example:</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># app/graphql/types/base_input_object.rb</span>
 <span class="c1"># Add a base class</span>
-<span class="k">class</span> <span class="nc">Types</span><span class="o">::</span><span class="no">BaseInputObject</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Schema</span><span class="o">::</span><span class="no">InputObject</span>
+<span class="k">class</span> <span class="nc">Types::BaseInputObject</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Schema</span><span class="o">::</span><span class="no">InputObject</span>
 <span class="k">end</span>
 
-<span class="k">class</span> <span class="nc">Types</span><span class="o">::</span><span class="no">PostAttributes</span> <span class="o">&lt;</span> <span class="no">Types</span><span class="o">::</span><span class="no">BaseInputObject</span>
+<span class="k">class</span> <span class="nc">Types::PostAttributes</span> <span class="o">&lt;</span> <span class="no">Types</span><span class="o">::</span><span class="no">BaseInputObject</span>
   <span class="n">description</span> <span class="s2">"Attributes for creating or updating a blog post"</span>
   <span class="n">argument</span> <span class="ss">:title</span><span class="p">,</span> <span class="no">String</span><span class="p">,</span> <span class="s2">"Header for the post"</span><span class="p">,</span> <span class="ss">required: </span><span class="kp">true</span>
   <span class="n">argument</span> <span class="ss">:full_text</span><span class="p">,</span> <span class="no">String</span><span class="p">,</span> <span class="s2">"Full body of the post"</span><span class="p">,</span> <span class="ss">required: </span><span class="kp">true</span>
@@ -90,7 +90,7 @@
 <span class="k">end</span>
 </code></pre></div></div>
 
-<p>For a full description of the <code class="highlighter-rouge">argument(...)</code> method, see the       <a href="/type_definitions/objects#field-arguments">argument section of the Objects guide</a>.</p>
+<p>For a full description of the <code class="language-plaintext highlighter-rouge">argument(...)</code> method, see the <a href="/type_definitions/objects#field-arguments">argument section of the Objects guide</a>.</p>
 
 <h2 id="using-input-objects">Using Input Objects</h2>
 
@@ -98,7 +98,7 @@
 
 <ul>
   <li>calling its method, corresponding to the name (underscore-cased)</li>
-  <li>calling <code class="highlighter-rouge">#[]</code> with the <em>camel-cased</em> name of the argument (this is for compatibility with previous GraphQL-Ruby versions)</li>
+  <li>calling <code class="language-plaintext highlighter-rouge">#[]</code> with the <em>camel-cased</em> name of the argument (this is for compatibility with previous GraphQL-Ruby versions)</li>
 </ul>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># This field takes an argument called `attributes`</span>
@@ -121,14 +121,53 @@
 
 <h2 id="customizing-input-objects">Customizing Input Objects</h2>
 
-<p>You can add or override methods on input object classes to customize them.  They have two instance variables by default:</p>
+<p>You can customize the <code class="language-plaintext highlighter-rouge">GraphQL::Schema::Argument</code> class which is used for input objects:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Types::BaseArgument</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Schema</span><span class="o">::</span><span class="no">Argument</span> 
+  <span class="c1"># your customization here ... </span>
+<span class="k">end</span> 
+
+
+<span class="k">class</span> <span class="nc">Types::BaseInputObject</span> <span class="o">&lt;</span> <span class="no">GraphQL</span><span class="o">::</span><span class="no">Schema</span><span class="o">::</span><span class="no">InputObject</span> 
+  <span class="c1"># Hook up the customized argument class </span>
+  <span class="n">argument_class</span><span class="p">(</span><span class="no">Types</span><span class="o">::</span><span class="no">BaseArgument</span><span class="p">)</span>  
+<span class="k">end</span> 
+</code></pre></div></div>
+
+<p>You can also add or override methods on input object classes to customize them.  They have two instance variables by default:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">@arguments</code>: A <a href="/api-doc/1.9.6/GraphQL/Query/Arguments" target="_blank" title="API docs for GraphQL::Query::Arguments"><code>GraphQL::Query::Arguments</code></a> instance</li>
-  <li><code class="highlighter-rouge">@context</code>: The current <a href="/api-doc/1.9.6/GraphQL/Query/Context" target="_blank" title="API docs for GraphQL::Query::Context"><code>GraphQL::Query::Context</code></a></li>
+  <li><code class="language-plaintext highlighter-rouge">@arguments</code>: A <a href="/api-doc/1.11.6/GraphQL/Query/Arguments" target="_blank" title="API docs for GraphQL::Query::Arguments"><code>GraphQL::Query::Arguments</code></a> instance</li>
+  <li><code class="language-plaintext highlighter-rouge">@context</code>: The current <a href="/api-doc/1.11.6/GraphQL/Query/Context" target="_blank" title="API docs for GraphQL::Query::Context"><code>GraphQL::Query::Context</code></a></li>
 </ul>
 
 <p>Any extra methods you define on the class can be used for field resolution, as demonstrated above.</p>
+
+<h2 id="converting-to-other-ruby-objects">Converting to Other Ruby Objects</h2>
+
+<p>Your input objects can be automatically converted to other Ruby types before they’re passed to your application code. This is an easy way to use <code class="language-plaintext highlighter-rouge">Range</code>’s in your schema:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Types::DateRangeInput</span> <span class="o">&lt;</span> <span class="no">Types</span><span class="o">::</span><span class="no">BaseInputObject</span>
+  <span class="n">description</span> <span class="s2">"Range of dates"</span>
+  <span class="n">argument</span> <span class="ss">:min</span><span class="p">,</span> <span class="no">Types</span><span class="o">::</span><span class="no">Date</span><span class="p">,</span> <span class="s2">"Minimum value of the range"</span><span class="p">,</span> <span class="ss">required: </span><span class="kp">true</span>
+  <span class="n">argument</span> <span class="ss">:max</span><span class="p">,</span> <span class="no">Types</span><span class="o">::</span><span class="no">Date</span><span class="p">,</span> <span class="s2">"Maximum value of the range"</span><span class="p">,</span> <span class="ss">required: </span><span class="kp">true</span>
+
+  <span class="k">def</span> <span class="nf">prepare</span>
+    <span class="n">min</span><span class="o">..</span><span class="n">max</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">Types::CalendarType</span> <span class="o">&lt;</span> <span class="no">Types</span><span class="o">::</span><span class="no">BaseObject</span>
+  <span class="n">field</span> <span class="ss">:appointments</span><span class="p">,</span> <span class="p">[</span><span class="no">Types</span><span class="o">::</span><span class="no">Appointment</span><span class="p">],</span> <span class="s2">"Appointments on your calendar"</span><span class="p">,</span> <span class="ss">null: </span><span class="kp">false</span> <span class="k">do</span>
+    <span class="n">argument</span> <span class="ss">:during</span><span class="p">,</span> <span class="no">Types</span><span class="o">::</span><span class="no">DateRangeInput</span><span class="p">,</span> <span class="s2">"Only show appointments within this range"</span><span class="p">,</span> <span class="ss">required: </span><span class="kp">true</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">appointments</span><span class="p">(</span><span class="n">during</span><span class="p">:)</span>
+    <span class="c1"># during will be an instance of Range</span>
+    <span class="n">object</span><span class="p">.</span><span class="nf">appointments</span><span class="p">.</span><span class="nf">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">appointment</span><span class="o">|</span> <span class="n">during</span><span class="p">.</span><span class="nf">cover?</span><span class="p">(</span><span class="n">appointment</span><span class="p">.</span><span class="nf">date</span><span class="p">)</span> <span class="p">}</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
 
 </div>
 <p class="guide-footer">
